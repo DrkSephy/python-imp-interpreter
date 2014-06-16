@@ -22,6 +22,12 @@
 # 4. If there is no matching regex, we report an error and quit. 
 # 5. Repeat until there are no more characters left to match. 
 
+# NOTES: The order we pass in the regular expressions is important.
+# 'lex' will iterate over the expressions and will accept the first 
+# one that matches. When using 'lex', we have to put the most specific
+# expressions first (like matching operators and keywords), followed
+# by more general expressions (like for identifiers and numbers).
+
 import sys
 import re
 
