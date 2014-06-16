@@ -17,3 +17,29 @@
        is our intermediate representation.
     3. Evaluate the AST and print the state at the end of execution.
 */
+
+/*  Writing a Lexer 
+ *  ---------------
+ *  The process of splitting characters into tokens is called lexing and 
+ *  is performed by a lexer. Tokens are short strings that contain the most
+ *  basic parts of the program such as numbers, identifiers, keywords and 
+ *  operators. Our lexer will ignore whitespace and comments, because they are
+ *  ignored by the interpreter. 
+
+                        y:= x * 2 + 3 
+                              |
+                              |
+                              V
+                            LEXER
+
+                 [y] [:=] [x] [*] [2] [+] [3]
+
+  * The process of organizing tokens into an abstract syntax tree is called
+  * parsing. The parser extracts the structure of the program into a form
+  * we can evaluate. 
+
+  * The process of actually executing the parsed AST is called evaluation. 
+
+
+
+*/
