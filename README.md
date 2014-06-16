@@ -7,3 +7,5 @@ Research Links
 --------------
 
 * A Turbo Pascal Compiler: http://compilers.iecc.com/crenshaw/
+
+* Post containing several resources: http://stackoverflow.com/questions/1669/learning-to-write-a-compiler
