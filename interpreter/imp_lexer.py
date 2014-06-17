@@ -18,9 +18,22 @@ ID       = 'ID'
 
 # Next, we define token expressions which will be used in the lexer.
 # We start with the characters we will drop (whitespace and comments)
+# 'r' before each regex means the string is "raw". 
+# Python will not handle any escape characters, which allows us to 
+# include backslashes in the strings, which are used by the regex
+# engine to escape operators like "+" and "*".
 
 token_exprs = [
     (r'[ \\n\\t]+',         None),   # match whitespace
     (r'#[^\\n]*',           None),   # match comments
+
+# Now, we need expressions for matching operators and reserved words. 
+
+    (r'\:=',                RESERVED), 
+    (r'\(',                 RESERVED),
+    (r'\)',                 RESERVED),
+    (r';',                  RESERVED),
+    (r'\+',                 RESERVED),
+    (r'-',                  RESERVED), 
 ]
 
