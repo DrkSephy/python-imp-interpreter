@@ -17,3 +17,17 @@
 # any language. First, we will write a language agnostic library of 
 # combinators, then use that to write our IMP parser. 
 
+class Result:
+    """
+    Input: 
+        value: part of the AST
+        pos:   the index of the next token in the stream
+
+    Returns: `Result` object on success, or `None` on failure. 
+    """
+    def __init__(self, value, pos):
+        self.value = value
+        self.pos = pos
+
+    def __repr__(self):
+        return 'Result(%s, %d)' % (self.value, self.pos)
