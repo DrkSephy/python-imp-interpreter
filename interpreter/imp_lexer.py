@@ -35,5 +35,28 @@ token_exprs = [
     (r';',                  RESERVED),
     (r'\+',                 RESERVED),
     (r'-',                  RESERVED), 
+    (r'\*',                 RESERVED),
+    (r'/',                  RESERVED),
+    (r'<=',                 RESERVED),
+    (r'<',                  RESERVED),
+    (r'>=',                 RESERVED),
+    (r'>',                  RESERVED),
+    (r'=',                  RESERVED),
+    (r'!=',                 RESERVED),
+    (r'and',                RESERVED),
+    (r'or',                 RESERVED),
+    (r'not',                RESERVED),
+    (r'if',                 RESERVED),
+    (r'then',               RESERVED),
+    (r'else',               RESERVED),
+    (r'while',              RESERVED),
+    (r'do',                 RESERVED),
+    (r'end',                RESERVED),
+
+    # Regular expressions for integers and identifiers. 
+    # The regex for identifiers would match all of the 
+    # reserved words above, so we put this one last.
+    (r'[0-9]+',                 INT),
+    (r'[A-Za-z][A-Za-z0-9_]*',  ID),
 ]
 
