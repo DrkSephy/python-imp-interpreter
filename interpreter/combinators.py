@@ -79,3 +79,17 @@ class Reserved(Parser):
             return Result(tokens[pos][0], pos + 1)
         else:
             return None 
+
+# The next class we implement is the `Tag` combinator. It matches any
+# token which has a particular tag. The value can be anything.
+
+class Tag(Parser):
+    def __init__(self, tag):
+        self.tag = tag
+
+    def __call__(self, tokens, pos):
+        if pos < len(tokens) and tokens[pos][1] is self.tag:
+            return Result(tokens[pos][0], pos + 1)
+        else:
+            return None
+
