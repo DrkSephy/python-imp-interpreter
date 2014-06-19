@@ -32,3 +32,16 @@ class Result:
     def __repr__(self):
         return 'Result(%s, %d)' % (self.value, self.pos)
 
+class Parser:
+    def __call__(self, tokens, pos):
+        return None # subclasses will override this
+
+    def __add__(self, other):
+        return Concat(self, other)
+
+    def __or__(self, other):
+        return Alternate(self, other)
+
+    def __xor__(self, function):
+        return Process(self, function)
+
