@@ -61,3 +61,13 @@ class Parser:
     def __xor__(self, function):
         return Process(self, function)
 
+# The simplest combinator is `Reserved`, which will be used to parse
+# reserved words and operators. It accepts tokens with a specific 
+# value and tag. 
+
+# NOTE: Tokens are nothing but value-tag pairs, where:
+#       token[0] : value
+#       token[1] : tag
+
+
+
