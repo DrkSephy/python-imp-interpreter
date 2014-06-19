@@ -31,3 +31,4 @@ class Result:
 
     def __repr__(self):
         return 'Result(%s, %d)' % (self.value, self.pos)
+
