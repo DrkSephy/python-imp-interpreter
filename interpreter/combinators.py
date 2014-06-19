@@ -32,6 +32,22 @@ class Result:
     def __repr__(self):
         return 'Result(%s, %d)' % (self.value, self.pos)
 
+# Parsers are functions which take a stream of tokens as input. 
+# We will define parsers as objects with a __call__ method. This 
+# means that a parser object will behave as if it were a function, 
+# but we can also provide additional functionality by defining
+# some operators.
+
+# The __call__ method does the parsing. It's input is a full list 
+# of tokens, which are returned by the lexer, and an index into the
+# list indicating the next token. The default implementation will
+# always return `None` (failure), and the subclasses of `Parser` will
+# provide their own __call__ implementation. 
+
+# The other methods: __add__, __mul__, __or__, __xor__ define the 
+# `+`, `*`, `|`, `^` operators. Each operator provides a shortcut
+# for calling a different combinator. 
+
 class Parser:
     def __call__(self, tokens, pos):
         return None # subclasses will override this
