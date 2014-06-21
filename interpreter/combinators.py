@@ -96,3 +96,9 @@ class Tag(Parser):
 # The `Tag` and `Reserved` combinators are our primitives. All combinators 
 # will be built out of them at the most basic level. 
 
+# In order to parse more complicated expressions, we can create an `concat` 
+# combinator which will take two parsers as input (left and right). When 
+# the concat parser is applied, it will apply the left parser, followed by
+# the right parser. If both parsers are successful, the result value will 
+# be a pair containing the left and right results. If either parser is 
+# unsuccessful, `None` will be returned. 
