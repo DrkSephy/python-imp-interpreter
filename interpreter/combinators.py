@@ -122,3 +122,9 @@ class Concat(Parser):
 # parser = Concat(Concat(Tag(INT), Reserved('+', RESERVED)), Tag(Int))
 # or using the + operator shorthand:
 # parser = Tag(INT) + Reserved('+', RESERVED) + Tag(INT)
+
+# The next combinator we build is the `Alternate` combinator. Like the `Concat`
+# parser, it also takes a left and right parser as input. It starts by applying
+# the left parser, and if successful that result is returned. If unsuccessful, 
+# it applies the right parser and returns its result.
+
