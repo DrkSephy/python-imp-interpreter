@@ -116,3 +116,9 @@ class Concat(Parser):
                 combined_value = (left_result.value, right_result.value)
                 return Result(combined_value, right_result.pos)
         return None 
+
+# `Concat` is useful for parsing sequences of tokens. For example, to parse
+# ` 1 + 2 `, we can write this as :
+# parser = Concat(Concat(Tag(INT), Reserved('+', RESERVED)), Tag(Int))
+# or using the + operator shorthand:
+# parser = Tag(INT) + Reserved('+', RESERVED) + Tag(INT)
