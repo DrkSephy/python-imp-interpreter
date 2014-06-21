@@ -93,3 +93,6 @@ class Tag(Parser):
         else:
             return None
 
+# The `Tag` and `Reserved` combinators are our primitives. All combinators 
+# will be built out of them at the most basic level. 
+
