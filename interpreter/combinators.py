@@ -140,3 +140,11 @@ class Alternate(Parser):
         else:
             right_result = self.right(tokens, pos)
             return right_result
+
+# The `Alternate` class is useful for choosing among several possible parsers. 
+# For example, if we wanted to parse any binary operator:
+# 
+#   parser = Reserved('+', RESERVED) | 
+#            Reserved('-', RESERVED) |
+#            Reserved('*', RESERVED) |
+#            Reserved('/', RESERVED)
