@@ -155,3 +155,14 @@ class Alternate(Parser):
 # still returned, but the value of that result is `None`. No tokens are to be 
 # consumed in the failing case, the result position is the same as the initial 
 # position. 
+
+class Opt(Parser):
+    def __init__(self, parser):
+        self.parser = parser
+
+    def __call__(self, tokens, pos):
+        result = self.parser(tokens.pos)
+        if result:
+            return result
+        else:
+            return Result(None, pos)
