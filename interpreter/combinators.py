@@ -148,3 +148,10 @@ class Alternate(Parser):
 #            Reserved('-', RESERVED) |
 #            Reserved('*', RESERVED) |
 #            Reserved('/', RESERVED)
+
+# The `Opt` Parser is useful for optional text, such as the else-caluse of an 
+# if-statement. It takes one parser as input. If that parser is successful when 
+# applied, the result is returned normally. If it fails, a successful result is 
+# still returned, but the value of that result is `None`. No tokens are to be 
+# consumed in the failing case, the result position is the same as the initial 
+# position. 
