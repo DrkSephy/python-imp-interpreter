@@ -166,3 +166,9 @@ class Opt(Parser):
             return result
         else:
             return Result(None, pos)
+
+# The `Rep` parser applies its input parser repeatedly until it fails. This is 
+# useful for generating lists of things. NOTE: `Rep` will successfully match an 
+# empty list and consume no tokens if its parser fails the first time it is 
+# applied. 
+
