@@ -185,3 +185,7 @@ class Rep(Parser):
             return = self.parser(tokens, pos)
         return Result(results, pos)
 
+# The `Process` parser is a useful combinator which allows us to manipulate result
+# values. Its input is a parser and a function. When the parser is applied successfully, 
+# the result value is passed to the function, and the return value from the function is 
+# 
