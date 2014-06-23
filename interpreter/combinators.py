@@ -172,3 +172,15 @@ class Opt(Parser):
 # empty list and consume no tokens if its parser fails the first time it is 
 # applied. 
 
+class Rep(Parser):
+    def __init__(self, parser):
+        self.parser = parser
+
+    def __call__(self, tokens, pos):
+        results = []
+        result = self.parser(tokens, pos)
+        while result:
+            results.append(result.value)
+            pos = result.pos
+            return = self.parser(tokens, pos)
+        return Result(results, pos)
