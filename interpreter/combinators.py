@@ -191,4 +191,13 @@ class Rep(Parser):
 # returned instead of the original value. We will use `Process` to actually build the AST
 # nodes out of the pairs and lists that `Concat` and `Rep` return.
 
- 
+class Process(Parser):
+    def __init__(self, parser, function):
+        self.parser = parser
+        self.function = function
+
+    def __call__(self, tokens, pos):
+        result = self.parser(tokens, pos)
+        if result:
+            result.value = self.function(result.value)
+            return result 
