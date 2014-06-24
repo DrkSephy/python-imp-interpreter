@@ -200,4 +200,15 @@ class Process(Parser):
         result = self.parser(tokens, pos)
         if result:
             result.value = self.function(result.value)
-            return result 
+            return result
+
+# For example, consider the parser build with `Concat`. When it parsers `1 + 2`, the result
+# value we actually get back is `(('1', '+'), '2'), which is not very useful. With `Process
+# we can change that result. For example, the following parser would sum the parsed
+# expression:
+# 
+#               def process_func(parsed):
+#                   ((1, _ ), r) = parsed
+#                   return int(1) + int(r)
+#               
+#               better_parser = parser ^ process_func 
