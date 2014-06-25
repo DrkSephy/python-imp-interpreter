@@ -223,3 +223,12 @@ class Process(Parser):
 # yet. We would not need this in a language with lazy evaluation like Haskell or Scala,
 # but Python does not use lazy evaluation.
 
+class Lazy(Parser):
+    def __init__(self, parser_func):
+        self.parser = None
+        self.parser_func = parser_func
+
+    def __call__(self, tokens, pos):
+        if not self.parser:
+            self.parser = self.parser_func()
+        return self.parser(tokens, pos)
