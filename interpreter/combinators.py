@@ -232,3 +232,9 @@ class Lazy(Parser):
         if not self.parser:
             self.parser = self.parser_func()
         return self.parser(tokens, pos)
+
+# Another combinator we will need to implement is the `Phrase`, which will take a 
+# single input parser, apply it and return its result normally. The only catch is 
+# that it will fail if its input parser does not consume all of the remaining tokens. 
+# The top level parser for IMP will be a `Phrase` parser. This prevents us from 
+# partially matching a program which has garbage at the end. 
