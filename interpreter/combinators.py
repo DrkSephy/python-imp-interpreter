@@ -212,3 +212,14 @@ class Process(Parser):
 #                   return int(1) + int(r)
 #               
 #               better_parser = parser ^ process_func 
+
+
+# The `Lazy` parser is a less useful combinator. Instead of taking an input parser, 
+# it takes a zero-argument function which returns a parser. `Lazy` will not call the
+# function to get the parser until it is applied. This is useful to build recursive
+# parsers (like how arithmetic expressions can include arithmetic expressions). Since
+# the parser refers to itself, we can't just define it by referencing it directly; 
+# at the time the parser's defining expression is evaluated, the parser is not defined 
+# yet. We would not need this in a language with lazy evaluation like Haskell or Scala,
+# but Python does not use lazy evaluation.
+
