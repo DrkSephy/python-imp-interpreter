@@ -249,3 +249,19 @@ class Phrase(Parser):
             return result
         else:
             return None
+
+# The last combinator we need is an expression parser, which is used to match an 
+# expression which consists of a list of elements separated by something. Here is 
+# an example with compound statements:
+# 
+#           a := 10;
+#           b := 20;
+#           c := 30
+# 
+# In the above case, we have a list of statements separated by semicolons. In order
+# to avoid a "left" recursive overflow, we will match a list similarly to the way 
+# `Rep` does. `Exp` takes two parsers as input. The first parser matches the actual
+# elements of the list. The second matches the separators. On success, the separator 
+# parser must return a function which combines elements parsed on the left and right 
+# into a single value. The value is accumulated for the whole list, left -> right, 
+# and is returned. 
