@@ -27,3 +27,15 @@
 #   * Include a __repr__ method for printing out the AST for debugging purposes.
 #   * All AST classes will subclass `Equality` so we can check if two AST objects
 #     are the same, to help with testing. 
+
+from equality import *
+
+class Aexp(Equality):
+    pass
+
+class IntAexp(Aexp):
+    def __init__(self, i):
+        self.i = i
+
+    def __repr__(self):
+        return 'IntAexp(%d)' % self.i
