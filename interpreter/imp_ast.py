@@ -167,3 +167,18 @@ def process_group(parsed):
 def aexp_group():
     return keyword('(') + Lazy(aexp) + keyword(')'( ^ process_group
 
+# `process_group` is a function used with the `Process` combinator (^ operator). It discards the # parenthesis tokens and returns the expression in between. `aexp_group` is the actual parser. 
+# Remember, the `+` operator is shorthand for the `Concat` combinator. So, this will parse '(', 
+# followed by an arithmetic expression (which will be parsed by `aexp`, which we define soon), 
+# followed by ')'. We need to avoid calling aexp directly since aexp will call `aexp_group`, 
+# which will result in infinite recursion. To avoid this, we use the `Lazy` combinator, which 
+# defers the call to `aexp` until the parser is actually applied to some input. 
+
+# The next step is to combine `aexp_value` and `aexp_group` using `aexp_term`. An `aexp_term` 
+# expression is any basic, self-contained expression where we don't have to worry about operator
+# precedence with respect to other expressions.
+
+def aexp_term():
+  return aexp_value() | aexp_group()
+
+
