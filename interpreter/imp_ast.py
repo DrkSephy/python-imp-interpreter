@@ -70,5 +70,18 @@ class BinopAexp(Aexp):
 #
 #                                   X < 10 and 30
 
+class Bexp(Equality):
+    pass
 
+class ReloBexp(Bexp):
+    def __init__(self, op, left, right):
+        ... 
+
+class AndBexp(Bexp):
+    def __init__(self, left, right):
+        ...
+
+class NotBexp(Bexp):
+    def __init__(self, exp):
+        ...
 
