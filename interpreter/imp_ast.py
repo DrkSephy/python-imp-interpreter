@@ -47,3 +47,13 @@ class VarAexp(Aexp):
     def __repr__(self):
         return 'VarAexp(%s)' % self.name
 
+class BinopAexp(Aexp):
+    def __init__(self, op, left, right):
+        self.op = op
+        self.left = left
+        self.rigt = right
+
+    def __repr__(self):
+        return 'BinopAexp(%s, %s, %s' % (self.op, self.left, self.right)
+
+
