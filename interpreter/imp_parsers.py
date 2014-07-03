@@ -237,4 +237,18 @@ def stmt_list():
     separator = keyword(';') ^ (lambda x: lambda l, r: CompoundStatement(l, r))
     return Exp(stmt(), separator)
 
+def if_stmt():
+    def process(parsed):
+        (((((_, condition), _), true_stmt), false_parsed), _) = parsed
+        if false_parsed:
+            (_, false_stmt) = false_parsed
+        else:
+            false_stmt = None
+        return IfStatement(condition, true_stmt, false_stmt)
+    return keyword('if') + bexp() + \
+           keyword('then') + Lazy(stmt_list) + \
+           Opt(keyword('else') + Lazy(stmt_list)) + \
+           keyword('end') ^ process
+
+
 
