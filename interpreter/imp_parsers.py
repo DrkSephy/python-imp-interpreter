@@ -225,3 +225,12 @@ def bexp():
 # an operator and returns a function which combines two sub-expressions into an expression using 
 # that operator. We pass this along to `precedence`, just like we did with `aexp`. 
 
+# We now move onto parsing IMP statements. 
+
+def assign_stmt():
+    def process(parsed):
+        ((name, _), exp) = parsed
+        return AssignStatement(name, exp)
+    return id + keyword(':=') + aexp() ^ process
+
+
