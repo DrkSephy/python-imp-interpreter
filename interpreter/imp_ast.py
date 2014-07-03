@@ -262,4 +262,8 @@ def precedence(value_parser, precedence_levels, combine):
 #   E1(4*a) + E1(b/2) - E1(6 + c)
 #   E2((4*a) + (b/2) - (6+c))
 
+# We use `precedence` to directly define `aexp`:
+
+def aexp():
+    return precedence(aexp_term(), aexp_precedence_levels, process_binop)
 
