@@ -204,4 +204,16 @@ def process_binop(op):
 # a function which, given the matched separator, returns a combining function. The combining 
 # function takes the parsed expressions to the left and right of the separator and returns a 
 # single, combined expression. `process_binop` is actually what will be returned by the right 
-# parser. 
+# parser.
+
+# Next we define our precedence levels and a combinator to deal with them. 
+
+def any_operator_in_list(ops):
+    op_parsers = [keyword(op) for op in ops]
+    parser = reduce(lambda l, r: l | r, op_parsers)
+    return parser
+
+aexp_precedence_levels = [
+    ['*', '/'],
+    ['+', '-'],
+]
