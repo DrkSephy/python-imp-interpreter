@@ -144,5 +144,26 @@ num = Tag(INT) ^ (lambda i: int(i))
 def aexp_value():
     return (num ^ (lambda i: IntAexp(i))) | \ 
            (id  ^ (lambda v: VarAexp(v))) 
+ 
+# The | operator is shorthand for the `Alternate` combinator. This function will attempt
+# to parse an integer expression first, and if that fails it will try to parse a variable
+# expression. 
 
+# We've defined aexp_value() as a zero-argument function instead of a global value, like
+# we did with `id` and `num`. We will do the same thing with all the other parsers. The 
+# reason is that we don't want the code for each parser to be evaluated right away. If we 
+# define every parser as a global, each parser would not be able to reference parsers that 
+# come after it in the same source file, since they would not be defined yet. This leads to
+# not being able to define recursive parsers. 
+
+# The next thing we need to support is grouping with parenthesis in our arithmetic expressions.
+# Grouped expressions don't require their own AST class, but they require another parser to 
+# handle them. 
+
+def process_group(parsed):
+    ((_, p), _) = parsed
+    return p
+
+def aexp_group():
+    return keyword('(') + Lazy(aexp) + keyword(')'( ^ process_group
 
