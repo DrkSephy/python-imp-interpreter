@@ -191,4 +191,14 @@ def bexp_not():
 # below. Since `bexp_not` will be used to define `bexp_term`, we need to use the `Lazy`
 # combinator to avoid infinite recursion. 
 
+def bexp_group():
+    return keyword('(') + Lazy(bexp) + keyword(')') ^ process_group
+
+def bexp_term():
+    return bexp_not()   | \
+           bexp_relop() | \
+           bexp_group()
+
+# `bexp_group` and `bexp_term` are essentially the same as their arithmetic equivalents. 
+
 
