@@ -121,5 +121,12 @@ class WhileStatement(Statement):
 def keyword(kw):
     return Reserved(kw, RESERVED)
 
+# `keyword` is actually a combinator because it is a function which returns a parser. 
+# It will be used directly in other parsers. 
+
+# The `id` parser is used to match variable names. It uses the `Tag` combinator, which
+# matches a token with the specified tag. 
+
+id = Tag(ID)
 
 
