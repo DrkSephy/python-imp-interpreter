@@ -267,3 +267,21 @@ def precedence(value_parser, precedence_levels, combine):
 def aexp():
     return precedence(aexp_term(), aexp_precedence_levels, process_binop)
 
+# Now that we are finished handling arithmetic expressions, we move onto Boolean expressions, 
+# which are simpler than arithmetic expressions. We start with the most basic Boolean expression,
+# relations.
+
+def process_relop(parsed):
+      ((left, op), right) = parsed
+      return RelopBexp(op, left, right)
+
+def bexp_relop():
+      relops = ['<', '<=', '>', '>=', '=', '!=']
+      return aexp() + any_operator_in_list(relops) + aexp() ^ process_relop
+
+# `process_relop` is a function which we use with the `Process` combinator. It just takes three
+# concatenated values and creates a `RelopBexp` out of them. In `bexp_relop`, we parse two 
+# arithmetic expressions (aexp), separated by a relational operator. We use our method 
+# `any_operator_in_list` so we don't have to write a case for every single operator. There is 
+# no need to use combinators like `Exp` or precedence` since relational expressions can't be 
+# chained together in IMP. 
