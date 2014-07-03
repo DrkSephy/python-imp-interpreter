@@ -85,3 +85,7 @@ class NotBexp(Bexp):
     def __init__(self, exp):
         ...
 
+# Next we focus on statements, which can contain both arithmetic and boolean expressions.
+# There are four kinds of statements: assignment, compound, conditional and loops.
+
+
