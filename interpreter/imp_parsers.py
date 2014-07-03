@@ -270,3 +270,11 @@ def parser():
 # parser will parse an entire program. A program is simply a list of statements, 
 # but the `Phrase` combinator ensures we use every token in the file, rather
 # than ending prematurely if there are any garbage tokens at the end. 
+
+def imp_parse(tokens):
+    ast = parser()(tokens, 0)
+    return ast
+
+# imp_parse is the function that we call to parse a program. It takes a full list
+# of tokens, calls `parser`, starting with the first token, and returns the 
+# resulting AST. 
