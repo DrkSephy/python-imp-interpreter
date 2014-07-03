@@ -285,3 +285,15 @@ def bexp_relop():
 # `any_operator_in_list` so we don't have to write a case for every single operator. There is 
 # no need to use combinators like `Exp` or precedence` since relational expressions can't be 
 # chained together in IMP. 
+
+# The next operator to parse is the `not` expression, which is a unary operation with high 
+# precedence.
+
+def bexp_not():
+    return keyword('not') + Lazy(bexp_term) ^ (lambda parsed: NotBexp(parsed[1]))
+
+# Above we concatnate the keyword `not` with a Boolean expression term, which is defined 
+# below. Since `bexp_not` will be used to define `bexp_term`, we need to use the `Lazy`
+# combinator to avoid infinite recursion. 
+
+
