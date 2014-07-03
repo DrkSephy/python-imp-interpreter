@@ -129,4 +129,11 @@ def keyword(kw):
 
 id = Tag(ID)
 
+# The `num` parser is used to match integers. It works similarly to `id`, except it 
+# uses the `Process` combinator (actually, the ^ operator, which calls `Process`) to
+# convert the token into an actual integer value.
+
+num = Tag(INT) ^ (lambda i: int(i))
+
+
 
