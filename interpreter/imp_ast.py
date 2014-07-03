@@ -135,5 +135,14 @@ id = Tag(ID)
 
 num = Tag(INT) ^ (lambda i: int(i))
 
+# The next parser we need to build is the arithmetic expression parser, since we need to 
+# parser these in order to parse Boolean expressions and statements. 
+#
+# We will first define the `aexp_value` parser, which will convert the values returned 
+# by `num` and `id` into actual expressions. 
+
+def aexp_value():
+    return (num ^ (lambda i: IntAexp(i))) | \ 
+           (id  ^ (lambda v: VarAexp(v))) 
 
 
