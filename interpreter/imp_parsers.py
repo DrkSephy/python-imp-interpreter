@@ -37,7 +37,7 @@ num = Tag(INT) ^ (lambda i: int(i))
 # by `num` and `id` into actual expressions. 
 
 def aexp_value():
-    return (num ^ (lambda i: IntAexp(i))) | \ 
+    return (num ^ (lambda i: IntAexp(i))) | \
            (id  ^ (lambda v: VarAexp(v))) 
  
 # The | operator is shorthand for the `Alternate` combinator. This function will attempt
@@ -60,7 +60,7 @@ def process_group(parsed):
     return p
 
 def aexp_group():
-    return keyword('(') + Lazy(aexp) + keyword(')'( ^ process_group
+    return keyword('(') + Lazy(aexp) + keyword(')') ^ process_group
 
 # `process_group` is a function used with the `Process` combinator (^ operator). It discards the # parenthesis tokens and returns the expression in between. `aexp_group` is the actual parser. 
 # Remember, the `+` operator is shorthand for the `Concat` combinator. So, this will parse '(', 

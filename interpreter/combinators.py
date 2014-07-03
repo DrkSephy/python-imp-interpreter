@@ -182,7 +182,7 @@ class Rep(Parser):
         while result:
             results.append(result.value)
             pos = result.pos
-            return = self.parser(tokens, pos)
+            return self.parser(tokens, pos)
         return Result(results, pos)
 
 # The `Process` parser is a useful combinator which allows us to manipulate result
