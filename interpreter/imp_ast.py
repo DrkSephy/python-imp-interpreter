@@ -107,3 +107,19 @@ class WhileStatement(Statement):
     def __init__(self, condition, body):
         ...
 
+# Our AST classes are now set up, and we also have a set of parser combinators. We now
+# move on to write our parser. We start with the most basic structures and then work up
+# to more complicated structures.
+#
+# The first parser we will implement is the `keyword` parser, which is a specialized 
+# version of the `Reserved` combinator using the `RESERVED` tag that all keyword tokens
+# are tagged with. 
+#
+# NOTE: The `Reserved` tag will match a single token where both the text and tag are the 
+# same as the ones given.
+
+def keyword(kw):
+    return Reserved(kw, RESERVED)
+
+
+
