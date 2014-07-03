@@ -233,4 +233,8 @@ def assign_stmt():
         return AssignStatement(name, exp)
     return id + keyword(':=') + aexp() ^ process
 
+def stmt_list():
+    separator = keyword(';') ^ (lambda x: lambda l, r: CompoundStatement(l, r))
+    return Exp(stmt(), separator)
+
 
