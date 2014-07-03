@@ -250,5 +250,11 @@ def if_stmt():
            Opt(keyword('else') + Lazy(stmt_list)) + \
            keyword('end') ^ process
 
-
+def while_stmt():
+    def process(parsed):
+        ((((_, condition), _), body), _) = parsed
+        return WhileStatement(condition, body)
+    return keyword('while') + bexp() + \
+           keyword('do') + Lazy(stmt_list) + \
+           keyword('end') ^ process
 
