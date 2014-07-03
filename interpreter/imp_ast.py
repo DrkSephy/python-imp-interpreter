@@ -229,3 +229,37 @@ def precedence(value_parser, precedence_levels, combine):
     for precedence_level in precedence_levels[1:]:
         parser = parser * op_parser(precedence_level)
     return parser
+
+# `precedence` does most of the operations needed. The first argument, `value_parser` is a 
+# parser that can read the basic parts of an expression: numbers, variables and groups. That 
+# will be `aexp_term`. `precedence_levels` is a list of lists of operators, one list for each 
+# level. We use `aexp_precedence_levels` for this. `combine` will take a function which, given
+# an operator, returns a function to build a larger expression out of two smaller expressions. 
+# That is `process_binop`.
+
+# Inside `precedence, we define `op_parser` which, for a given precedence level, reads any
+# operator in that level and returns a function which combines two expressios. `op_parser` can
+# be used as the right-hand argument of `Exp`. We then start by calling `Exp` with op_parser for
+# the highest precedence level, since those operations will need to be grouped together first.
+# We use the resulting parser as the element parser (`Exp`'s left argument at the next level. 
+# When the loop finishes, the resulting parser can then correctly parse any arithmetic expression.
+
+# An example of the usage is shown below:
+#   E0 = value_parser
+#   E1 = E0 * op_parser(precedence_levels[0])
+#   E2 = E1 * op_parser(precedence_levels[1])
+
+# E0 is the same as `value_parser`, which can parse numbers, variables and groups, but not operators.
+# E1 can parse expressions containing everything E0 can match, separated by operators in the
+# first precedence level. Therefore, E1 can match a * b / c, but it would raise an error as 
+# soon as it encountered a `+` operator. E2 can match expressions E1 can match, separated 
+# by operators in the next precedence level. Since we only have two precedence levels, `E2`
+# can match any arithmetic expression we support.
+
+# For a real exmaple, see below:
+#   4 * a + b / 2 - ( 6 + c )
+#   E0(4) + E0(a) + E0(b) / E0(2) - E0(6 + c)
+#   E1(4*a) + E1(b/2) - E1(6 + c)
+#   E2((4*a) + (b/2) - (6+c))
+
+
