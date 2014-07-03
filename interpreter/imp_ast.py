@@ -194,3 +194,14 @@ def aexp_term():
 
 def process_binop(op):
     return lambda l, r: BinopAexp(op, 1, r)
+  
+# `process_binop` is what actually constructs the `BinopAexp` objects It takes any arithmetic 
+# operator and returns a function that combines a pair of expressions using that operator. 
+# `process_binop` will be used with the `Exp` combinator(* operator). `Exp` parses a list of 
+# expressions. The left operator of `Exp` is a parser that will match individual elements of 
+# the list (arithmetic expressions in our case). The right operand is a parser that will match 
+# the separators (operators). No matter which separator is matched, the right parser will return
+# a function which, given the matched separator, returns a combining function. The combining 
+# function takes the parsed expressions to the left and right of the separator and returns a 
+# single, combined expression. `process_binop` is actually what will be returned by the right 
+# parser. 
