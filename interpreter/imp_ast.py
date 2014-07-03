@@ -217,3 +217,15 @@ aexp_precedence_levels = [
     ['*', '/'],
     ['+', '-'],
 ]
+
+# `any_operator_in_list` takes in a list of keyword strings and returns a parser that will
+# match any of them. We will call this on `aexp_prededence_levels`, which contains a list of 
+# operators for each precedence level (highest precedence first).
+
+def precedence(value_parser, precedence_levels, combine):
+    def op_parser(precedence_level):
+        return any_operator_in_list(precedence_level) ^ combine
+    parser = value_parser * op_parser(precedence_levels[0])
+    for precedence_level in precedence_levels[1:]:
+        parser = parser * op_parser(precedence_level)
+    return parser
