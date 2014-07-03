@@ -56,4 +56,19 @@ class BinopAexp(Aexp):
     def __repr__(self):
         return 'BinopAexp(%s, %s, %s' % (self.op, self.left, self.right)
 
+# Boolean expressions are the next on our list. There are four kinds of 
+# Boolean expressions.
+#
+# * Relational expressions (ex: x < 20)
+# * AND expressions (such as x < 20 and y > 20)
+# * OR expressions
+# * NOT expressions
+#
+# The left and right sides of a relational expressions are arithmetic expressions.
+# The left and right sides of any "AND", "OR" or "NOT" expression are Boolean 
+# expressions. Restricting the type like this will help us avoid expressions such as:
+#
+#                                   X < 10 and 30
+
+
 
