@@ -199,6 +199,29 @@ def bexp_term():
            bexp_relop() | \
            bexp_group()
 
-# `bexp_group` and `bexp_term` are essentially the same as their arithmetic equivalents. 
+# `bexp_group` and `bexp_term` are essentially the same as their arithmetic equivalents. gitgi
 
+# Our last boolean expressions we need to parse are the `AND` and `OR` operators. These operators
+# work the same way as the arithmetic operators do, they are evaluated left to right, with `AND`
+# having the higher precedence. 
+
+bexp_precedence_levels = [
+    ['and'],
+    ['or'],
+]
+
+def process_logic(op):
+    if op == 'and':
+        return lambda l, r: AndBexp(l, r)
+    elif op == 'or':
+        return lambda l, r: OrBexp(l, r)
+    else:
+        raise RuntimeError('unknown logic operator: ' + op)
+
+def bexp():
+    return precedence(bexp_term(), bexp_precedence_levels, process_logic)
+
+# Like `process_binop`, `process_logic` is intended to be used with the `Exp` combinator. It takes
+# an operator and returns a function which combines two sub-expressions into an expression using 
+# that operator. We pass this along to `precedence`, just like we did with `aexp`. 
 
