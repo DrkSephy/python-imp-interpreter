@@ -179,6 +179,18 @@ def aexp_group():
 # precedence with respect to other expressions.
 
 def aexp_term():
-  return aexp_value() | aexp_group()
+    return aexp_value() | aexp_group()
 
+# Next up is handling operators and precedence. It is easy to define another kind of `aexp` 
+# parser and throw it together with `aexp_term`. This would result in a simple expression:
+# 
+#                                   1 + 2 * 3
+# being parsed incorrectly as:
+#
+#                                   (1 + 2) * 3
+#
+# The parser needs to be aware of operator precedence, and it needs to group together operations
+# with higher precedence. To do this, we need to define a few helper functions.
 
+def process_binop(op):
+    return lambda l, r: BinopAexp(op, 1, r)
