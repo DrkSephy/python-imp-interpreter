@@ -258,3 +258,15 @@ def while_stmt():
            keyword('do') + Lazy(stmt_list) + \
            keyword('end') ^ process
 
+def stmt():
+    return assign_stmt() | \
+           if_stmt()     | \
+           while_stmt()
+
+# top-level parser
+def parser():
+    return Phrase(stmt_list())
+
+# parser will parse an entire program. A program is simply a list of statements, 
+# but the `Phrase` combinator ensures we use every token in the file, rather
+# than ending prematurely if there are any garbage tokens at the end. 
