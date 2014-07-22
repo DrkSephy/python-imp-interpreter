@@ -232,10 +232,12 @@ def assign_stmt():
         ((name, _), exp) = parsed
         return AssignStatement(name, exp)
     return id + keyword(':=') + aexp() ^ process
+    
 
 def stmt_list():
-    separator = keyword(';') ^ (lambda x: lambda l, r: CompoundStatement(l, r))
+    separator = keyword(';') ^ (lambda x: lambda l, r:CompoundStatement(l, r))
     return Exp(stmt(), separator)
+
 
 def if_stmt():
     def process(parsed):
