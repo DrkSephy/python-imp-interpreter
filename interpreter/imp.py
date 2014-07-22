@@ -1,6 +1,5 @@
-
 import sys
-from imp_parsers import *
+from imp_parser import *
 from imp_lexer import *
 
 def usage():
