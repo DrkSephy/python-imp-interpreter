@@ -18,13 +18,6 @@
 # combinators, then use that to write our IMP parser. 
 
 class Result:
-    """
-    Input: 
-        value: part of the AST
-        pos:   the index of the next token in the stream
-
-    Returns: `Result` object on success, or `None` on failure. 
-    """
     def __init__(self, value, pos):
         self.value = value
         self.pos = pos
@@ -49,11 +42,11 @@ class Result:
 # for calling a different combinator. 
 
 class Parser:
-    def __call__(self, tokens, pos):
-        return None # subclasses will override this
-
     def __add__(self, other):
         return Concat(self, other)
+
+    def __mul__(self, other):
+        return Exp(self, other)
 
     def __or__(self, other):
         return Alternate(self, other)
@@ -75,7 +68,9 @@ class Reserved(Parser):
         self.tag = tag
 
     def __call__(self, tokens, pos):
-        if pos < len(tokens) and tokens[pos][0] == self.value and tokens[pos][1] is self.tag:
+        if pos < len(tokens) and \
+           tokens[pos][0] == self.value and \
+           tokens[pos][1] is self.tag:
             return Result(tokens[pos][0], pos + 1)
         else:
             return None 
@@ -115,7 +110,7 @@ class Concat(Parser):
             if right_result:
                 combined_value = (left_result.value, right_result.value)
                 return Result(combined_value, right_result.pos)
-        return None 
+        return None
 
 # `Concat` is useful for parsing sequences of tokens. For example, to parse
 # ` 1 + 2 `, we can write this as :
@@ -161,7 +156,7 @@ class Opt(Parser):
         self.parser = parser
 
     def __call__(self, tokens, pos):
-        result = self.parser(tokens.pos)
+        result = self.parser(tokens, pos)
         if result:
             return result
         else:
@@ -182,7 +177,7 @@ class Rep(Parser):
         while result:
             results.append(result.value)
             pos = result.pos
-            return self.parser(tokens, pos)
+            result = self.parser(tokens, pos)
         return Result(results, pos)
 
 # The `Process` parser is a useful combinator which allows us to manipulate result
@@ -232,6 +227,7 @@ class Lazy(Parser):
         if not self.parser:
             self.parser = self.parser_func()
         return self.parser(tokens, pos)
+
 
 # Another combinator we will need to implement is the `Phrase`, which will take a 
 # single input parser, apply it and return its result normally. The only catch is 
@@ -284,4 +280,4 @@ class Exp(Parser):
             next_result = next_parser(tokens, result.pos)
             if next_result:
                 result = next_result
-        return result  
+        return result
