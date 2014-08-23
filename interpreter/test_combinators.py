@@ -58,4 +58,8 @@ class TestCombinators(unittest.TestCase):
         parser = Opt(id)
         self.combinator_test('x', parser, 'x')
         self.combinator_test('12', parser, None)
-        
+
+    def test_rep(self):
+        parser = Rep(id)
+        self.combinator_test('', parser, [])
+        self.combinator_test('x y z', parser, ['x', 'y', 'z'])
