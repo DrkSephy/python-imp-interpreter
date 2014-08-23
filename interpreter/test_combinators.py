@@ -63,3 +63,12 @@ class TestCombinators(unittest.TestCase):
         parser = Rep(id)
         self.combinator_test('', parser, [])
         self.combinator_test('x y z', parser, ['x', 'y', 'z'])
+
+    def test_process(self):
+        parser = Process(integer, int)
+        self.combinator_test('12', parser, 12)
+
+    def test_process_sugar(self):
+        parser = integer ^ int
+        self.combinator_test('12', parser, 12)
+        
