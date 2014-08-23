@@ -13,7 +13,11 @@ token_exprs = [
 ]
 
 class TestLexer(unittest.TestCase):
-    pass
+    def lexer_test(self, code, expected):
+        actual = lex(code, token_exprs)
+        self.assertEquals(expected, actual)
+
+    
 
         
     
