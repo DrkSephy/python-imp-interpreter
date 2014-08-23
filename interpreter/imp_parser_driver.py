@@ -1,5 +1,5 @@
 import sys
-from imp_parsers import *
+from imp_parser import *
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
