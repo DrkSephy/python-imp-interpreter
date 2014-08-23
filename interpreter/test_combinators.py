@@ -20,3 +20,15 @@ class TestCombinators(unittest.TestCase):
 
     def test_reserved(self):
         self.combinator_test('if', Reserved('if', RESERVED), 'if')
+
+    def test_concat(self):
+        parser = Concat(id, id)
+        self.combinator_test('x y', parser, ('x', 'y'))
+
+    def test_concat_sugar(self):
+        parser = id + id
+        self.combinator_test('x y', parser, ('x', 'y'))
+
+    def test_concat_associativity(self):
+        parser = id + id + id
+        self.combinator_test('x y z', parser, (('x', 'y'), 'z'))
