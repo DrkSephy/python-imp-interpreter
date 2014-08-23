@@ -71,4 +71,11 @@ class TestCombinators(unittest.TestCase):
     def test_process_sugar(self):
         parser = integer ^ int
         self.combinator_test('12', parser, 12)
-        
+
+    def test_lazy(self):
+        def get_parser():
+            return id
+        parser = Lazy(get_parser)
+        self.combinator_test('x', parser, 'x')
+
+    
