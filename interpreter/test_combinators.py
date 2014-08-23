@@ -32,3 +32,15 @@ class TestCombinators(unittest.TestCase):
     def test_concat_associativity(self):
         parser = id + id + id
         self.combinator_test('x y z', parser, (('x', 'y'), 'z'))
+
+    def test_exp(self):
+        separator = keyword('+') ^ (lambda x: lambda l, r: l + r)
+        parser = Exp(id, separator)
+        self.combinator_test('x', parser, 'x')
+        self.combinator_test('x + y', parser, 'xy')
+        self.combinator_test('x + y + z', parser, 'xyz')
+
+    def test_exp_sugar(self):
+        separator = keyword('+') ^ (lambda x: lambda l, r: l + r)
+        parser = id * separator
+        self.combinator_test('x + y + z', parser, 'xyz')
