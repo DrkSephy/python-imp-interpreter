@@ -56,4 +56,3 @@ token_exprs = [
 # Create our lexer function
 def imp_lex(characters):
     return lexer.lex(characters, token_exprs)
-
