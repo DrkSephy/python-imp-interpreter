@@ -44,3 +44,12 @@ class TestCombinators(unittest.TestCase):
         separator = keyword('+') ^ (lambda x: lambda l, r: l + r)
         parser = id * separator
         self.combinator_test('x + y + z', parser, 'xyz')
+
+    def test_alternate(self):
+        parser = Alternate(id, integer)
+        self.combinator_test('x', parser, 'x')
+        self.combinator_test('12', parser, '12')
+
+    def test_alternate_sugar(self):
+        parser = id | integer
+        self.combinator_test('x', parser, 'x')
