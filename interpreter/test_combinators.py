@@ -78,4 +78,6 @@ class TestCombinators(unittest.TestCase):
         parser = Lazy(get_parser)
         self.combinator_test('x', parser, 'x')
 
-    
+    def test_phrase(self):
+        parser = Phrase(id)
+        self.combinator_test('x', parser, 'x')
