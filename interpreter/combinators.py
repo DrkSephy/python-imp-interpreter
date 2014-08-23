@@ -15,7 +15,7 @@
 
 # Parser combinators are usually fairly generic, and can be used with
 # any language. First, we will write a language agnostic library of 
-# combinators, then use that to write our IMP parser. 
+# combinators, then use that to write our IMP parser.
 
 class Result:
     def __init__(self, value, pos):
@@ -54,6 +54,18 @@ class Parser:
     def __xor__(self, function):
         return Process(self, function)
 
+# The next class we implement is the `Tag` combinator. It matches any
+# token which has a particular tag. The value can be anything.
+class Tag(Parser):
+    def __init__(self, tag):
+        self.tag = tag
+
+    def __call__(self, tokens, pos):
+        if pos < len(tokens) and tokens[pos][1] is self.tag:
+            return Result(tokens[pos][0], pos + 1)
+        else:
+            return None
+
 # The simplest combinator is `Reserved`, which will be used to parse
 # reserved words and operators. It accepts tokens with a specific 
 # value and tag. 
@@ -61,7 +73,6 @@ class Parser:
 # NOTE: Tokens are nothing but value-tag pairs, where:
 #       token[0] : value
 #       token[1] : tag
-
 class Reserved(Parser):
     def __init__(self, value, tag):
         self.value = value
@@ -71,19 +82,6 @@ class Reserved(Parser):
         if pos < len(tokens) and \
            tokens[pos][0] == self.value and \
            tokens[pos][1] is self.tag:
-            return Result(tokens[pos][0], pos + 1)
-        else:
-            return None 
-
-# The next class we implement is the `Tag` combinator. It matches any
-# token which has a particular tag. The value can be anything.
-
-class Tag(Parser):
-    def __init__(self, tag):
-        self.tag = tag
-
-    def __call__(self, tokens, pos):
-        if pos < len(tokens) and tokens[pos][1] is self.tag:
             return Result(tokens[pos][0], pos + 1)
         else:
             return None
@@ -97,7 +95,6 @@ class Tag(Parser):
 # the right parser. If both parsers are successful, the result value will 
 # be a pair containing the left and right results. If either parser is 
 # unsuccessful, `None` will be returned. 
-
 class Concat(Parser):
     def __init__(self, left, right):
         self.left = left
@@ -112,6 +109,41 @@ class Concat(Parser):
                 return Result(combined_value, right_result.pos)
         return None
 
+# The last combinator we need is an expression parser, which is used to match an 
+# expression which consists of a list of elements separated by something. Here is 
+# an example with compound statements:
+# 
+#           a := 10;
+#           b := 20;
+#           c := 30
+# 
+# In the above case, we have a list of statements separated by semicolons. In order
+# to avoid a "left" recursive overflow, we will match a list similarly to the way 
+# `Rep` does. `Exp` takes two parsers as input. The first parser matches the actual
+# elements of the list. The second matches the separators. On success, the separator 
+# parser must return a function which combines elements parsed on the left and right 
+# into a single value. The value is accumulated for the whole list, left -> right, 
+# and is returned. 
+class Exp(Parser):
+    def __init__(self, parser, separator):
+        self.parser = parser
+        self.separator = separator
+
+    def __call__(self, tokens, pos):
+        result = self.parser(tokens, pos)
+
+        def process_next(parsed):
+            (sepfunc, right) = parsed
+            return sepfunc(result.value, right)
+        next_parser = self.separator + self.parser ^ process_next
+
+        next_result = result
+        while next_result:
+            next_result = next_parser(tokens, result.pos)
+            if next_result:
+                result = next_result
+        return result            
+
 # `Concat` is useful for parsing sequences of tokens. For example, to parse
 # ` 1 + 2 `, we can write this as :
 # parser = Concat(Concat(Tag(INT), Reserved('+', RESERVED)), Tag(Int))
@@ -123,6 +155,13 @@ class Concat(Parser):
 # the left parser, and if successful that result is returned. If unsuccessful, 
 # it applies the right parser and returns its result.
 
+# The `Alternate` class is useful for choosing among several possible parsers. 
+# For example, if we wanted to parse any binary operator:
+# 
+#   parser = Reserved('+', RESERVED) | 
+#            Reserved('-', RESERVED) |
+#            Reserved('*', RESERVED) |
+#            Reserved('/', RESERVED)
 class Alternate(Parser):
     def __init__(self, left, right):
         self.left = left
@@ -136,21 +175,12 @@ class Alternate(Parser):
             right_result = self.right(tokens, pos)
             return right_result
 
-# The `Alternate` class is useful for choosing among several possible parsers. 
-# For example, if we wanted to parse any binary operator:
-# 
-#   parser = Reserved('+', RESERVED) | 
-#            Reserved('-', RESERVED) |
-#            Reserved('*', RESERVED) |
-#            Reserved('/', RESERVED)
-
 # The `Opt` Parser is useful for optional text, such as the else-caluse of an 
 # if-statement. It takes one parser as input. If that parser is successful when 
 # applied, the result is returned normally. If it fails, a successful result is 
 # still returned, but the value of that result is `None`. No tokens are to be 
 # consumed in the failing case, the result position is the same as the initial 
-# position. 
-
+# position.
 class Opt(Parser):
     def __init__(self, parser):
         self.parser = parser
@@ -165,8 +195,7 @@ class Opt(Parser):
 # The `Rep` parser applies its input parser repeatedly until it fails. This is 
 # useful for generating lists of things. NOTE: `Rep` will successfully match an 
 # empty list and consume no tokens if its parser fails the first time it is 
-# applied. 
-
+# applied.
 class Rep(Parser):
     def __init__(self, parser):
         self.parser = parser
@@ -185,7 +214,6 @@ class Rep(Parser):
 # the result value is passed to the function, and the return value from the function is 
 # returned instead of the original value. We will use `Process` to actually build the AST
 # nodes out of the pairs and lists that `Concat` and `Rep` return.
-
 class Process(Parser):
     def __init__(self, parser, function):
         self.parser = parser
@@ -217,7 +245,6 @@ class Process(Parser):
 # at the time the parser's defining expression is evaluated, the parser is not defined 
 # yet. We would not need this in a language with lazy evaluation like Haskell or Scala,
 # but Python does not use lazy evaluation.
-
 class Lazy(Parser):
     def __init__(self, parser_func):
         self.parser = None
@@ -228,13 +255,11 @@ class Lazy(Parser):
             self.parser = self.parser_func()
         return self.parser(tokens, pos)
 
-
 # Another combinator we will need to implement is the `Phrase`, which will take a 
 # single input parser, apply it and return its result normally. The only catch is 
 # that it will fail if its input parser does not consume all of the remaining tokens. 
 # The top level parser for IMP will be a `Phrase` parser. This prevents us from 
-# partially matching a program which has garbage at the end. 
-
+# partially matching a program which has garbage at the end.
 class Phrase(Parser):
     def __init__(self, parser):
         self.parser = parser
@@ -245,39 +270,3 @@ class Phrase(Parser):
             return result
         else:
             return None
-
-# The last combinator we need is an expression parser, which is used to match an 
-# expression which consists of a list of elements separated by something. Here is 
-# an example with compound statements:
-# 
-#           a := 10;
-#           b := 20;
-#           c := 30
-# 
-# In the above case, we have a list of statements separated by semicolons. In order
-# to avoid a "left" recursive overflow, we will match a list similarly to the way 
-# `Rep` does. `Exp` takes two parsers as input. The first parser matches the actual
-# elements of the list. The second matches the separators. On success, the separator 
-# parser must return a function which combines elements parsed on the left and right 
-# into a single value. The value is accumulated for the whole list, left -> right, 
-# and is returned. 
-
-class Exp(Parser):
-    def __init__(self, parser, separator):
-        self.parser = parser
-        self.separator = separator
-
-    def __call__(self, tokens, pos):
-        result = self.parser(tokens, pos)
-
-        def process_next(parsed):
-            (sepfunc, right) = parsed
-            return sepfunc(result.value, right)
-        next_parser = self.separator + self.parser ^ process_next
-
-        next_result = result
-        while next_result:
-            next_result = next_parser(tokens, result.pos)
-            if next_result:
-                result = next_result
-        return result
