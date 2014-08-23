@@ -26,12 +26,88 @@
 #     classes won't do much except contain data. 
 #   * Include a __repr__ method for printing out the AST for debugging purposes.
 #   * All AST classes will subclass `Equality` so we can check if two AST objects
-#     are the same, to help with testing. 
+#     are the same, to help with testing.
 
 from equality import *
 
+class Statement(Equality):
+    pass
+
 class Aexp(Equality):
     pass
+
+# Boolean expressions are the next on our list. There are four kinds of 
+# Boolean expressions.
+#
+# * Relational expressions (ex: x < 20)
+# * AND expressions (such as x < 20 and y > 20)
+# * OR expressions
+# * NOT expressions
+#
+# The left and right sides of a relational expressions are arithmetic expressions.
+# The left and right sides of any "AND", "OR" or "NOT" expression are Boolean 
+# expressions. Restricting the type like this will help us avoid expressions such as:
+#
+#                                   X < 10 and 30
+class Bexp(Equality):
+    pass
+
+# Next we focus on statements, which can contain both arithmetic and boolean expressions.
+# There are four kinds of statements: assignment, compound, conditional and loops.
+class AssignStatement(Statement):
+    def __init__(self, name, aexp):
+        self.name = name
+        self.aexp = aexp
+
+    def __repr__(self):
+        return 'AssignStatement(%s, %s)' % (self.name, self.aexp)
+
+    def eval(self, env):
+        value = self.aexp.eval(env)
+        env[self.name] = value
+
+class CompoundStatement(Statement):
+    def __init__(self, first, second):
+        self.first = first
+        self.second = second
+
+    def __repr__(self):
+        return 'CompoundStatement(%s, %s)' % (self.first, self.second)
+
+    def eval(self, env):
+        self.first.eval(env)
+        self.second.eval(env)
+
+class IfStatement(Statement):
+    def __init__(self, condition, true_stmt, false_stmt):
+        self.condition = condition
+        self.true_stmt = true_stmt
+        self.false_stmt = false_stmt
+
+    def __repr__(self):
+        return 'IfStatement(%s, %s, %s)' % (self.condition, self.true_stmt, self.false_stmt)
+
+    def eval(self, env):
+        condition_value = self.condition.eval(env)
+        if condition_value:
+            self.true_stmt.eval(env)
+        else:
+            if self.false_stmt:
+                self.false_stmt.eval(env)
+
+class WhileStatement(Statement):
+    def __init__(self, condition, body):
+        self.condition = condition
+        self.body = body
+
+    def __repr__(self):
+        return 'WhileStatement(%s, %s)' % (self.condition, self.body)
+
+    def eval(self, env):
+        condition_value = self.condition.eval(env)
+        while condition_value:
+            self.body.eval(env)
+            condition_value = self.condition.eval(env)
 
 class IntAexp(Aexp):
     def __init__(self, i):
@@ -60,10 +136,10 @@ class BinopAexp(Aexp):
     def __init__(self, op, left, right):
         self.op = op
         self.left = left
-        self.rigt = right
+        self.right = right
 
     def __repr__(self):
-        return 'BinopAexp(%s, %s, %s' % (self.op, self.left, self.right)
+        return 'BinopAexp(%s, %s, %s)' % (self.op, self.left, self.right)
 
     def eval(self, env):
         left_value = self.left.eval(env)
@@ -80,24 +156,7 @@ class BinopAexp(Aexp):
             raise RuntimeError('unknown operator: ' + self.op)
         return value
 
-# Boolean expressions are the next on our list. There are four kinds of 
-# Boolean expressions.
-#
-# * Relational expressions (ex: x < 20)
-# * AND expressions (such as x < 20 and y > 20)
-# * OR expressions
-# * NOT expressions
-#
-# The left and right sides of a relational expressions are arithmetic expressions.
-# The left and right sides of any "AND", "OR" or "NOT" expression are Boolean 
-# expressions. Restricting the type like this will help us avoid expressions such as:
-#
-#                                   X < 10 and 30
-
-class Bexp(Equality):
-    pass
-
-class ReloBexp(Bexp):
+class RelopBexp(Bexp):
     def __init__(self, op, left, right):
         self.op = op
         self.left = left
@@ -124,7 +183,6 @@ class ReloBexp(Bexp):
         else:
             raise RuntimeError('unknown operator: ' + self.op)
         return value
-
 
 class AndBexp(Bexp):
     def __init__(self, left, right):
@@ -162,69 +220,3 @@ class NotBexp(Bexp):
     def eval(self, env):
         value = self.exp.eval(env)
         return not value
-
-
-# Next we focus on statements, which can contain both arithmetic and boolean expressions.
-# There are four kinds of statements: assignment, compound, conditional and loops.
-
-class Statement(Equality):
-    pass
-
-class AssignStatement(Statement):
-    def __init__(self, name, aexp):
-        self.name = name
-        self.aexp = aexp
-
-    def __repr__(self):
-        return 'AssignStatement(%s, %s)' % (self.name, self.aexp)
-
-    def eval(self, env):
-        value = self.aexp.eval(env)
-        env[self.name] = value
-
-
-class CompundStatement(Statement):
-    def __init__(self, first, second):
-        self.first = first
-        self.second = second
-
-    def __repr__(self):
-        return 'CompoundStatement(%s, %s)' % (self.first, self.second)
-
-    def eval(self, env):
-        self.first.eval(env)
-        self.second.eval(env)
-
-
-class IfStatement(Statement):
-    def __init__(self, condition, true_stmt, false_stmt):
-        self.condition = condition
-        self.true_stmt = true_stmt
-        self.false_stmt = false_stmt
-
-    def __repr__(self):
-        return 'IfStatement(%s, %s, %s)' % (self.condition, self.true_stmt, self.false_stmt)
-
-    def eval(self, env):
-        condition_value = self.condition.eval(env)
-        if condition_value:
-            self.true_stmt.eval(env)
-        else:
-            if self.false_stmt:
-                self.false_stmt.eval(env)
-
-
-class WhileStatement(Statement):
-    def __init__(self, condition, body):
-        self.condition = condition
-        self.body = body
-
-    def __repr__(self):
-        return 'WhileStatement(%s, %s)' % (self.condition, self.body)
-
-    def eval(self, env):
-        condition_value = self.condition.eval(env)
-        while condition_value:
-            self.body.eval(env)
-            condition_value = self.condition.eval(env)
-
