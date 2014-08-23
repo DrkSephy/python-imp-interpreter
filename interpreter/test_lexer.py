@@ -20,8 +20,16 @@ class TestLexer(unittest.TestCase):
     def test_empty(self):
         self.lexer_test('', [])
 
-    
+    def test_id(self):
+        self.lexer_test('abc', [('abc', ID)])
 
-        
-    
+    def test_keyword_first(self):
+        self.lexer_test('keyword', [('keyword', KEYWORD)])
+
+    def test_space(self):
+        self.lexer_test(' ', [])
+
+    def test_id_space(self):
+        self.lexer_test('abc def', [('abc', ID), ('def', ID)])
+
     
