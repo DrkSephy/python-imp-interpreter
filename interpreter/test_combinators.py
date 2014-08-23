@@ -53,3 +53,9 @@ class TestCombinators(unittest.TestCase):
     def test_alternate_sugar(self):
         parser = id | integer
         self.combinator_test('x', parser, 'x')
+
+    def test_opt(self):
+        parser = Opt(id)
+        self.combinator_test('x', parser, 'x')
+        self.combinator_test('12', parser, None)
+        
