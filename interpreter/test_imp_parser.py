@@ -55,3 +55,11 @@ class TestImpParser(unittest.TestCase):
                                   RelopBexp('<', IntAexp(3), IntAexp(4))),
                           RelopBexp('<', IntAexp(5), IntAexp(6)))
         self.parser_test(code, bexp(), expected)
+
+    def test_bexp_logic_group(self):
+        code = '1 < 2 and (3 < 4 or 5 < 6)'
+        expected = AndBexp(RelopBexp('<', IntAexp(1), IntAexp(2)),
+                           OrBexp(RelopBexp('<', IntAexp(3), IntAexp(4)),
+                                  RelopBexp('<', IntAexp(5), IntAexp(6))))
+        self.parser_test(code, bexp(), expected)
+
