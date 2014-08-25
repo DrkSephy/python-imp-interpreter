@@ -78,3 +78,9 @@ class TestImpParser(unittest.TestCase):
                                AssignStatement('x', IntAexp(3)),
                                AssignStatement('x', IntAexp(4)))
         self.parser_test(code, stmt_list(), expected)
+
+    def test_while_stmt(self):
+        code = 'while 1 < 2 do x := 3 end'
+        expected = WhileStatement(RelopBexp('<', IntAexp(1), IntAexp(2)),
+                                  AssignStatement('x', IntAexp(3)))
+        self.parser_test(code, stmt_list(), expected)
