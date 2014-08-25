@@ -63,3 +63,8 @@ class TestImpParser(unittest.TestCase):
                                   RelopBexp('<', IntAexp(5), IntAexp(6))))
         self.parser_test(code, bexp(), expected)
 
+    def test_bexp_not_precedence(self):
+        code = 'not 1 < 2 and 3 < 4'
+        expected = AndBexp(NotBexp(RelopBexp('<', IntAexp(1), IntAexp(2))), 
+                           RelopBexp('<', IntAexp(3), IntAexp(4)))
+        self.parser_test(code, bexp(), expected)
