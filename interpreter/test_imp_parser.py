@@ -48,3 +48,10 @@ class TestImpParser(unittest.TestCase):
     def test_bexp_and(self):
         expected = AndBexp(RelopBexp('<', IntAexp(2), IntAexp(3)), RelopBexp('<', IntAexp(3), IntAexp(4)))
         self.parser_test('2 < 3 and 3 < 4', bexp(), expected)
+
+    def test_bexp_logic(self):
+        code = '1 < 2 and 3 < 4 or 5 < 6'
+        expected = OrBexp(AndBexp(RelopBexp('<', IntAexp(1), IntAexp(2)), 
+                                  RelopBexp('<', IntAexp(3), IntAexp(4))),
+                          RelopBexp('<', IntAexp(5), IntAexp(6)))
+        self.parser_test(code, bexp(), expected)
