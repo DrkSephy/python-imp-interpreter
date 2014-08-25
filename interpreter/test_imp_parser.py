@@ -68,3 +68,13 @@ class TestImpParser(unittest.TestCase):
         expected = AndBexp(NotBexp(RelopBexp('<', IntAexp(1), IntAexp(2))), 
                            RelopBexp('<', IntAexp(3), IntAexp(4)))
         self.parser_test(code, bexp(), expected)
+
+    def test_assign_stmt(self):
+        self.parser_test('x := 1', stmt_list(), AssignStatement('x', IntAexp(1)))
+
+    def test_if_stmt(self):
+        code = 'if 1 < 2 then x := 3 else x := 4 end'
+        expected = IfStatement(RelopBexp('<', IntAexp(1), IntAexp(2)),
+                               AssignStatement('x', IntAexp(3)),
+                               AssignStatement('x', IntAexp(4)))
+        self.parser_test(code, stmt_list(), expected)
