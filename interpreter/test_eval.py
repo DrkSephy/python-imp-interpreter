@@ -11,4 +11,7 @@ class TestEvaluation(unittest.TestCase):
         env = {}
         program.eval(env)
         self.assertEquals(expected_env, env)
+
+    def test_assign(self):
+        self.program_test('x := 1', {'x': 1})
         
