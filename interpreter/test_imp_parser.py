@@ -19,3 +19,8 @@ class TestImpParser(unittest.TestCase):
             parser = precedence(num, levels, combine)
             self.parser_test('2 * 3 + 4', parser, 10)
             self.parser_test('2 + 3 * 4', parser, 14)
+
+    def test_aexp_num(self):
+        self.parser_test('12', aexp(), IntAexp(12))
+
+    
