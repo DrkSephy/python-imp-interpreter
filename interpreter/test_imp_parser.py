@@ -28,3 +28,8 @@ class TestImpParser(unittest.TestCase):
 
     def test_aexp_group(self):
         self.parser_test('(12)', aexp(), IntAexp(12))
+
+    def test_aexp_binop(self):
+        code = '2 * 3 + 4'
+        expected = BinopAexp('+', BinopAexp('*', IntAexp(2), IntAexp(3)), IntAexp(4))
+        self.parser_test('2 * 3 + 4', aexp(), expected)
