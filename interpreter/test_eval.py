@@ -17,3 +17,6 @@ class TestEvaluation(unittest.TestCase):
 
     def test_compound(self):
         self.program_test('x := 1; y:= 2', {'x': 1, 'y': 2})
+
+    def test_if(self):
+        self.program_test('if 1 < 2 then x := 1 else x :=2 end', {'x': 1})
