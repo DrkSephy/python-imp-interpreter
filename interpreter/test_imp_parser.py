@@ -44,3 +44,7 @@ class TestImpParser(unittest.TestCase):
 
     def test_bexp_not(self):
         self.parser_test('not 2 < 3', bexp(), NotBexp(RelopBexp('<', IntAexp(2), IntAexp(3))))
+
+    def test_bexp_and(self):
+        expected = AndBexp(RelopBexp('<', IntAexp(2), IntAexp(3)), RelopBexp('<', IntAexp(3), IntAexp(4)))
+        self.parser_test('2 < 3 and 3 < 4', bexp(), expected)
