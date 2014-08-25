@@ -23,4 +23,5 @@ class TestImpParser(unittest.TestCase):
     def test_aexp_num(self):
         self.parser_test('12', aexp(), IntAexp(12))
 
-    
+    def test_aexp_var(self):
+        self.parser_test('x', aexp(), VarAexp('x'))
