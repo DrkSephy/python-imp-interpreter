@@ -39,3 +39,8 @@ class TestImpParser(unittest.TestCase):
         expected = BinopAexp('*', IntAexp(2), BinopAexp('+', IntAexp(3), IntAexp(4)))
         self.parser_test(code, aexp(), expected)
 
+    def test_bexp_relop(self):
+        self.parser_test('2 < 3', bexp(), RelopBexp('<', IntAexp(2), IntAexp(3)))
+
+    def test_bexp_not(self):
+        self.parser_test('not 2 < 3', bexp(), NotBexp(RelopBexp('<', IntAexp(2), IntAexp(3))))
