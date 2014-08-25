@@ -14,4 +14,6 @@ class TestEvaluation(unittest.TestCase):
 
     def test_assign(self):
         self.program_test('x := 1', {'x': 1})
-        
+
+    def test_compound(self):
+        self.program_test('x := 1; y:= 2', {'x': 1, 'y': 2})
