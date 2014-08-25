@@ -84,3 +84,9 @@ class TestImpParser(unittest.TestCase):
         expected = WhileStatement(RelopBexp('<', IntAexp(1), IntAexp(2)),
                                   AssignStatement('x', IntAexp(3)))
         self.parser_test(code, stmt_list(), expected)
+
+    def test_compound_stmt(self):
+        code = 'x := 1; y := 2'
+        expected = CompoundStatement(AssignStatement('x', IntAexp(1)),
+                                     AssignStatement('y', IntAexp(2)))
+        self.parser_test(code, stmt_list(), expected)
