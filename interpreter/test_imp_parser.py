@@ -8,3 +8,14 @@ class TestImpParser(unittest.TestCase):
         result = parser(tokens, 0)
         self.assertNotEquals(None, result)
         self.assertEquals(expected, result.value)
+
+    def test_precedence(self):
+        def combine(op):
+            if op == '*':
+                return lambda l, r: int(l) * int(r)
+            else:
+                return lambda l, r: int(l) + int(r)
+            levels = [['*'], ['+']]
+            parser = precedence(num, levels, combine)
+            self.parser_test('2 * 3 + 4', parser, 10)
+            self.parser_test('2 + 3 * 4', parser, 14)
