@@ -1,1 +1,3 @@
 interpreter/*.pyc
+.DS_Store
+interpreter/.DS_Store
