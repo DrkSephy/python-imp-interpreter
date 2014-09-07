@@ -1,3 +1,13 @@
+# imp.py
+# ------
+# 
+# 1. Reads target program from command line
+# 2. Tokenizes target program.
+# 3. Builds a parser based on tokens.
+# 4. Builds AST based on Parser
+# 5. Stores final state of all assigned variables
+# 6. Prints out each variable and final state
+
 import sys
 from imp_parser import *
 from imp_lexer import *
