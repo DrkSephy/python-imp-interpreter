@@ -1,3 +1,5 @@
+# Agnostic lexer
+
 import sys
 import re
 
